@@ -87,7 +87,9 @@ Cube.moves = {
 	"S": "f F'"
 };
 
-Cube.prototype.apply = function (moves) {
+Cube.prototype.apply = function (moves, isInverse) {
+	isInverse = isInverse || false;
+	
 	moves = moves.split(" ");
 	
 	for (var i = 0; i < moves.length; i ++) {
@@ -96,22 +98,24 @@ Cube.prototype.apply = function (moves) {
 		switch (move[move.length - 1]) {
 			case "'":
 				move = move.slice(0, move.length - 1);
-				this.applyMove(move, true);
+				this.applyMove(move, !isInverse);
 			break; case "2":
 				move = move.slice(0, move.length - 1);
 				this.applyMove(move);
 				this.applyMove(move);
 			break; default:
-				this.applyMove(move);
+				this.applyMove(move, isInverse);
 		}
 	}
 };
 
 Cube.prototype.applyMove = function (raw, isInverse) {
+	isInverse = isInverse || false;
+	
 	var move = Cube.moves[raw];
 	
 	if (typeof move == "string") {
-		return this.apply(move);
+		return this.apply(move, isInverse);
 	}
 	
 	var newState = this.state.slice();
