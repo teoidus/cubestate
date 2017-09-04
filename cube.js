@@ -1,3 +1,14 @@
+Object.defineProperty(Array.prototype, 'chunk_inefficient', {
+    value: function(chunkSize) {
+        var array=this.slice();
+        return [].concat.apply([],
+            array.map(function(elem,i) {
+                return i%chunkSize ? [] : [array.slice(i,i+chunkSize)];
+            })
+        );
+    }
+});
+
 function Cube () {
 	// Indices
 	/*
@@ -119,17 +130,6 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 }
 
 Cube.prototype.printState = function () {
-	Object.defineProperty(Array.prototype, 'chunk_inefficient', {
-    value: function(chunkSize) {
-        var array=this.slice();
-        return [].concat.apply([],
-            array.map(function(elem,i) {
-                return i%chunkSize ? [] : [array.slice(i,i+chunkSize)];
-            })
-        );
-    }
-});
-	
 	console.log(this.state.slice().chunk_inefficient(9).join("\n"));
 };
 
