@@ -2,6 +2,6 @@ const Cube = require("./cube.js");
 
 var cube = new Cube();
 
-cube.apply("R");
+cube.apply("x x'");
 
 cube.printState();
