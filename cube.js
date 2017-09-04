@@ -132,13 +132,13 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 		if (isInverse) {
 			var hack = newState.slice(0, 9).reverse();
 			newState = hack.concat(newState.slice(9));
+			
+			var hack = newState.slice(27, 36).reverse();
+			newState = newState.slice(0, 27).concat(hack).concat(newState.slice(36))
 		} else {
 			var hack = newState.slice(45, 54).reverse();
 			newState = newState.slice(0, 45).concat(hack);
 		}
-		
-		/*var hack = newState.slice(27, 36).reverse();
-		newState = newState.slice(0, 27).concat(hack).concat(newState.slice(36));*/
 	}
 	
 	if (raw == "y") {
