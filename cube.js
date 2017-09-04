@@ -115,3 +115,5 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 	
 	this.state = newState;
 }
+
+module.exports = Cube;
