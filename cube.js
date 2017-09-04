@@ -94,7 +94,7 @@ Cube.prototype.apply = function (moves, isInverse) {
 	
 	for (var i = 0; i < moves.length; i ++) {
 		var move = moves[i];
-		console.log(move);
+		console.log(move + isInverse ? "'" : "");
 		switch (move[move.length - 1]) {
 			case "'":
 				move = move.slice(0, move.length - 1);
