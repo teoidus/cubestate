@@ -127,6 +127,7 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 	this.state = newState;
 	
 	this.printState(this.state);
+	console.log("----");
 }
 
 Cube.prototype.printState = function () {
