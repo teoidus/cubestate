@@ -1,6 +1,4 @@
-const CubestateCompiler = require("./cubestate.js");
+const cubestate = require("./cubestate.js");
 const fs = require("fs");
 
-var compiler = new CubestateCompiler();
-
-console.log(compiler.compile(fs.readFileSync("cat.cs").toString()));
+console.log(cubestate.compile(fs.readFileSync("cat.cs").toString()));
