@@ -10,7 +10,7 @@ x2 U R U L' U2 .7
 .3
 R U' .2
 L B' .2
-B .1
+.1
 L' U2 .3
 x2 D L2 E F' U .6
 F2 U' .8
