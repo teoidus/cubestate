@@ -65,7 +65,13 @@ function chunkBF (code) {
 }
 
 function generateCS (code) {
-	var chunked = chunkBF(code.replace(/[^+\-><[\].,]/g, "")).map((e) => ["+", "[", ">", "]", "<", "-"].indexOf(e));
+	var chunked = chunkBF(code.replace(/[^+\-><[\].,]/g, "")).map((e) => e
+		.replace(/\+/g, "0")
+		.replace(/\[/g, "1")
+		.replace(/>/g, "2")
+		.replace(/]/g, "3")
+		.replace("<", "4")
+		.replace("-", "5"));
 	var cube = new Cube();
 	
 	for (var i = 0; i < chunked.length; i ++) {
