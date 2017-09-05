@@ -30,7 +30,7 @@ CSCompiler.prototype.compile = function (code) {
 				moves = moves.slice(0, moves.length - 1);
 		}
 		
-		this.cube.apply(moves);
+		this.cube.apply(moves.join(" "));
 		
 		codestack += this.cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
 	}
