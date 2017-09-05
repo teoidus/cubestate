@@ -65,7 +65,11 @@ Cube.prototype.apply = function (moves, isInverse=false) {
 	
 	for (var i = 0; i < moves.length; i ++) {
 		var move = moves[i];
-		console.log(move + (isInverse ? "'" : ""));
+		
+		if (!move) {
+			continue;
+		}
+		
 		switch (move[move.length - 1]) {
 			case "'":
 				this.applyMove(move[0], !isInverse);
@@ -96,9 +100,6 @@ Cube.prototype.applyMove = function (raw, isInverse=false) {
 	}
 	
 	this.state = newState;
-	
-	this.printState(this.state);
-	console.log("----");
 }
 
 module.exports = Cube;
