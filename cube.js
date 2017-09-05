@@ -60,8 +60,9 @@ Cube.moves = {
 	"S": "f F'"
 };
 
-Cube.prototype.apply = function (moves, isInverse=false) {
+Cube.prototype.apply = function (moves, isInverse) {
 	moves = moves.split(" ");
+	isInverse = isInverse || false;
 	
 	if (isInverse) {
 		moves.reverse();
@@ -86,8 +87,9 @@ Cube.prototype.apply = function (moves, isInverse=false) {
 	}
 };
 
-Cube.prototype.applyMove = function (raw, isInverse=false) {
+Cube.prototype.applyMove = function (raw, isInverse) {
 	var move = Cube.moves[raw];
+	isInverse = isInverse || false;
 	
 	if (typeof move == "string") {
 		return this.apply(move, isInverse);
