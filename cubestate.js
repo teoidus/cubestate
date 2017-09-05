@@ -40,8 +40,45 @@ function compile (code) {
 	}
 	
 	return codestack;
-};
+}
+
+function chunkBF (code) {
+	var chunked = [""];
+	
+	for (var i = 0; i < code.length; i ++) {
+		if (chunked[chunked.length - 1].length == 9) {
+			chunked.push("");
+		}
+		
+		chunked[chunked.length - 1] += code[i];
+		
+		if (code[i] == "." || code[i] == ",") {
+			chunked.push("");
+		}
+	}
+	
+	while (!chunked[chunked.length - 1].length) {
+		chunked = chunked.slice(0, chunked.length - 1);
+	}
+	
+	return chunked;
+}
+
+function generateCS (code) {
+	var chunked = chunkBF(code.replace(/[^+\-><[\].,]/g, "")).map((e) => ["+", "[", ">", "]", "<", "-"].indexOf(e));
+	
+	var cube = new Cube();
+	cube.compileMaps();
+	
+	for (var i = 0; i < chunked.length; i ++) {
+		var chunk = chunked[i];
+		
+		console.log(chunk);
+	}
+}
 
 module.exports = {
-	compile: compile
+	chunkBF: chunkBF,
+	compile: compile,
+	generateCS: generateCS
 };
