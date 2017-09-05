@@ -70,8 +70,8 @@ function generateCS (code) {
 		.replace(/\[/g, "1")
 		.replace(/>/g, "2")
 		.replace(/]/g, "3")
-		.replace("<", "4")
-		.replace("-", "5"));
+		.replace(/</g, "4")
+		.replace(/-/g, "5"));
 	var cube = new Cube();
 	
 	for (var i = 0; i < chunked.length; i ++) {
