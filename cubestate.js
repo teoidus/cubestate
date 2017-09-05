@@ -78,7 +78,7 @@ function generateCS (code) {
 		var chunk = chunked[i];
 		var appendix = "";
 		
-		if (!+chunk[chunk.length - 1]) {
+		if (isNaN(+chunk[chunk.length - 1])) {
 			appendix = " " + chunk[chunk.length - 1] + (chunk.length - 1);
 			chunk = chunk.slice(0, chunk.length - 1);
 		}
