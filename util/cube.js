@@ -134,14 +134,14 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 		}
 	}
 	if ((depth + lowerBound/3) > maxDepth) {
-		return "no solution found";
+		return false;
 	}
 
 	if (depth == maxDepth) {
 		if (currentState.substring(0, goal.length) == goal) {
 			return accu;
 		} else {
-			return "no solution found";
+			return false;
 		}
 	}
 
@@ -178,7 +178,7 @@ Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 	var transDepth = 6;
 
 	for (var i = 0; i < maxDepth; i ++) {
-		console.log("Searching depth " + i);
+		//console.log("Searching depth " + i);
 		var accu = [];
 
 		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu, transpositions, transDepth);
