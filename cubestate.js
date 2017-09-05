@@ -38,4 +38,6 @@ function compile (code) {
 	return codestack;
 };
 
-module.exports = compile;
+module.exports = {
+	compile: compile
+};
