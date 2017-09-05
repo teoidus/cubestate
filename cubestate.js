@@ -33,7 +33,7 @@ CSCompiler.prototype.compile = function (code) {
 		this.cube.apply(moves.join(" "));
 		
 		console.log(moves.join(" "));
-		console.log(this.cube.state);
+		console.log(this.cube.state.join("").match(/.{9}/).join("\n"));
 		
 		codestack += this.cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
 	}
