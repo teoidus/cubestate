@@ -10,27 +10,11 @@ Object.defineProperty(Array.prototype, 'chunk_inefficient', {
 });
 
 function Cube () {
-	// Indices
-	/*
-		 00 01 02
-		 03 04 05  U
-		 06 07 08
-	36 37 38 09 10 11 18 19 20
-    L	39 40 41 12 13 14 21 22 23  R
-	42 43 44 15 16 17 24 25 26
-		 45 46 47
-		 48 49 50  D
-		 51 52 53
-		 35 34 33
-		 32 31 30  B (upside down because net)
-		 29 28 27
-	*/
-	
 	// U is 0
-	// F is 1
-	// R is 2
-	// B is 3
-	// L is 4
+	// L is 1
+	// F is 2
+	// R is 3
+	// B is 4
 	// D is 5
 	this.state = [
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -55,12 +39,12 @@ Cube.moves = {
 		45, 46, 47, 48, 49, 50, 51, 52, 53
 	],
 	"x": [
-		9, 10, 11, 12, 13, 14, 15, 16, 17,
-		45, 46, 47, 48, 49, 50, 51, 52, 53,
-		24, 21, 18, 25, 22, 19, 26, 23, 20,
-		0, 1, 2, 3, 4, 5, 6, 7, 8,
-		38, 41, 44, 37, 40, 43, 36, 39, 42,
-		35, 34, 33, 32, 31, 30, 29, 28, 27
+		18, 19, 20, 21, 22, 23, 24, 25, 26,
+		11, 14, 17, 10, 13, 16, 9, 12, 15,
+		45, 46, 47, 48, 49, 50, 51, 52, 53, 
+		33, 30, 27, 34, 31, 28, 35, 32, 29,
+		8, 7, 6, 5, 4, 3, 2, 1, 0, 
+		44, 43, 42, 41, 40, 39, 38, 37, 36
 	],
 	"y": [
 		6, 3, 0, 7, 4, 1, 8, 5, 2,
@@ -68,8 +52,8 @@ Cube.moves = {
 		27, 28, 29, 30, 31, 32, 33, 34, 35,
 		36, 37, 38, 39, 40, 41, 42, 43, 44,
 		9, 10, 11, 12, 13, 14, 15, 16, 17,
-		47, 50, 53, 46, 49, 52, 45, 48, 51
-	],
+		47, 50, 53, 46, 49, 52, 45, 48, 51,
+	]
 	"F": "x U x'",
 	"R": "y F y'",
 	"L": "y' F y",
@@ -87,9 +71,7 @@ Cube.moves = {
 	"S": "f F'"
 };
 
-Cube.prototype.apply = function (moves, isInverse) {
-	isInverse = isInverse || false;
-	
+Cube.prototype.apply = function (moves, isInverse=false) {
 	moves = moves.split(" ");
 	
 	for (var i = 0; i < moves.length; i ++) {
@@ -97,21 +79,17 @@ Cube.prototype.apply = function (moves, isInverse) {
 		console.log(move + (isInverse ? "'" : ""));
 		switch (move[move.length - 1]) {
 			case "'":
-				move = move.slice(0, move.length - 1);
-				this.applyMove(move, !isInverse);
+				this.applyMove(move[0], !isInverse);
 			break; case "2":
-				move = move.slice(0, move.length - 1);
-				this.applyMove(move);
-				this.applyMove(move);
+				this.applyMove(move[0]);
+				this.applyMove(move[0]);
 			break; default:
 				this.applyMove(move, isInverse);
 		}
 	}
 };
 
-Cube.prototype.applyMove = function (raw, isInverse) {
-	isInverse = isInverse || false;
-	
+Cube.prototype.applyMove = function (raw, isInverse=false) {
 	var move = Cube.moves[raw];
 	
 	if (typeof move == "string") {
@@ -126,26 +104,6 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 		} else {
 			newState[i] = this.state[move[i]];
 		}
-	}
-	
-	if (raw == "x") {
-		if (isInverse) {
-			var hack = newState.slice(0, 9).reverse();
-			newState = hack.concat(newState.slice(9));
-			
-			var hack = newState.slice(27, 36).reverse();
-			newState = newState.slice(0, 27).concat(hack).concat(newState.slice(36))
-		} else {
-			var hack = newState.slice(45, 54).reverse();
-			newState = newState.slice(0, 45).concat(hack);
-		}
-	}
-	
-	if (raw == "y") {
-		/*if (isInverse) {
-			var hack = newState.slice(36, 45).reverse();
-			newState = newState.slice(0, 36).concat(hack).concat(newState.slice(45));
-		}*/
 	}
 	
 	this.state = newState;
