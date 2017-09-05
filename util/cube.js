@@ -60,22 +60,6 @@ Cube.moves = {
 	"S": "f F'"
 };
 
-Cube.compileMaps = function () {
-	var keys = Object.keys(Cube.moves);
-	for (var i = 0; i < keys.length; i ++) {
-		if (typeof Cube.moves[keys[i]] == "string") {
-			var hack = new Cube();
-
-			for (var j = 0; j < hack.state.length; j ++) {
-				hack.state[j] = j;
-			}
-
-			hack.apply(Cube.moves[keys[i]]);
-			Cube.moves[keys[i]] = hack.state;
-		}
-	}
-}
-
 Cube.prototype.apply = function (moves, isInverse) {
 	moves = moves.split(/\s+/);
 	isInverse = isInverse || false;
@@ -204,5 +188,21 @@ Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 
 	return "no solution found";
 }
+
+(function () {
+	var keys = Object.keys(Cube.moves);
+	for (var i = 0; i < keys.length; i ++) {
+		if (typeof Cube.moves[keys[i]] == "string") {
+			var hack = new Cube();
+
+			for (var j = 0; j < hack.state.length; j ++) {
+				hack.state[j] = j;
+			}
+
+			hack.apply(Cube.moves[keys[i]]);
+			Cube.moves[keys[i]] = hack.state;
+		}
+	}
+})()
 
 module.exports = Cube;
