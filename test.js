@@ -1,7 +1,6 @@
-const Cube = require("./cube.js");
+const CubestateCompiler = require("./cubestate.js");
+const fs = require("fs");
 
-var cube = new Cube();
+var compiler = new CubestateCompiler();
 
-cube.apply("R U R'");
-
-cube.printState();
+compiler.compile(fs.readFileSync("helloworld.cs").toString());
