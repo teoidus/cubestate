@@ -60,8 +60,24 @@ Cube.moves = {
 	"S": "f F'"
 };
 
+Cube.compileMaps = function () {
+	var keys = Object.keys(Cube.moves);
+	for (var i = 0; i < keys.length; i ++) {
+		if (typeof Cube.moves[keys[i]] == "string") {
+			var hack = new Cube();
+
+			for (var j = 0; j < hack.state.length; j ++) {
+				hack.state[j] = j;
+			}
+
+			hack.apply(Cube.moves[keys[i]]);
+			Cube.moves[keys[i]] = hack.state;
+		}
+	}
+}
+
 Cube.prototype.apply = function (moves, isInverse) {
-	moves = moves.split(" ");
+	moves = moves.split(/\s+/);
 	isInverse = isInverse || false;
 	
 	if (isInverse) {
@@ -70,7 +86,7 @@ Cube.prototype.apply = function (moves, isInverse) {
 	
 	for (var i = 0; i < moves.length; i ++) {
 		var move = moves[i];
-		
+
 		if (!move) {
 			continue;
 		}
@@ -89,6 +105,7 @@ Cube.prototype.apply = function (moves, isInverse) {
 
 Cube.prototype.applyMove = function (raw, isInverse) {
 	var move = Cube.moves[raw];
+
 	isInverse = isInverse || false;
 	
 	if (typeof move == "string") {
@@ -106,6 +123,82 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 	}
 	
 	this.state = newState;
+}
+
+Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, transpositions) {
+	maxDepth = maxDepth || 0;
+	depth = depth || 0;
+	accu = accu || [];
+	transpositions = transpositions || {};
+
+	var currentState = this.state.join("");
+
+	if ((currentState in transpositions) && (transpositions[currentState] < depth)) {
+		return "no solution found";
+	}
+	transpositions[currentState] = depth;
+
+	var lowerBound = 0;
+	for (var i = 0; i < 9; i ++) {
+		if (currentState[i] == goal[i]) {
+			lowerBound ++;
+		}
+	}
+	if ((depth + lowerBound/3) > maxDepth) {
+		return "no solution found";
+	}
+
+	if (depth == maxDepth) {
+		if (currentState.substring(0, 9) == goal) {
+			return accu;
+		} else {
+			return "no solution found";
+		}
+	}
+
+	var modifiers = ["", "'", "2"];
+
+	for (var i = 0; i < moveGroup.length; i ++) {
+		if ((accu.length > 0) && (accu[accu.length - 1][0] == moveGroup[i])) {
+			continue;
+		}
+
+		for (var j = 0; j < modifiers.length; j ++) {
+			var move = moveGroup[i] + modifiers[j];
+
+			accu.push(move);
+			this.apply(move);
+
+			var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu, transpositions);
+			if (typeof attempt != "string")
+				return accu;
+
+			this.apply(move, true);
+			accu.pop(move);
+		}
+	}
+
+	return "no solution found";
+}
+
+Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
+	maxDepth = maxDepth || 0;
+
+	var moveGroup = ["R", "U", "F", "L", "B", "D", "x"];
+	var transpositions = {};
+
+	for (var i = 0; i < maxDepth; i ++) {
+		console.log("Searching depth " + i);
+		var accu = [];
+
+		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu, transpositions);
+
+		if (typeof searchResult != "string") {
+			return accu;
+		}
+	}
+
+	return "no solution found";
 }
 
 module.exports = Cube;
