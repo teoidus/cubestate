@@ -32,6 +32,9 @@ CSCompiler.prototype.compile = function (code) {
 		
 		this.cube.apply(moves.join(" "));
 		
+		console.log(moves.join(" "));
+		console.log(this.cube.state);
+		
 		codestack += this.cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
 	}
 	
