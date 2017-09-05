@@ -109,6 +109,8 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 	this.state = newState;
 };
 
+// epic
+// I have the vaguest idea how this works, but I was told to do some modifications to fix some weird stuff so yeah
 Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, transpositions, transDepth) {
 	maxDepth = maxDepth || 0;
 	depth = depth || 0;
@@ -126,7 +128,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 	}
 
 	var lowerBound = 0;
-	for (var i = 0; i < 9; i ++) {
+	for (var i = 0; i < goal.length; i ++) {
 		if (currentState[i] != goal[i]) {
 			lowerBound ++;
 		}
@@ -136,7 +138,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 	}
 
 	if (depth == maxDepth) {
-		if (currentState.substring(0, 9) == goal) {
+		if (currentState.substring(0, goal.length) == goal) {
 			return accu;
 		} else {
 			return "no solution found";
