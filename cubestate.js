@@ -1,10 +1,7 @@
 const Cube = require("./cube.js");
 
-function CSCompiler () {
-	this.cube = new Cube();
-}
-
-CSCompiler.prototype.compile = function (code) {
+function compile (code) {
+	var cube = new Cube();
 	var codestack = "";
 	
 	code = code.split("\n");
@@ -30,15 +27,15 @@ CSCompiler.prototype.compile = function (code) {
 				moves = moves.slice(0, moves.length - 1);
 		}
 		
-		this.cube.apply(moves.join(" "));
+		cube.apply(moves.join(" "));
 		
 		console.log(moves.join(" "));
-		console.log(this.cube.state.join("").match(/.{9}/).join("\n"));
+		console.log(cube.state.join("").match(/.{9}/).join("\n"));
 		
-		codestack += this.cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
+		codestack += cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
 	}
 	
 	return codestack;
 };
 
-module.exports = CSCompiler;
+module.exports = compile;
