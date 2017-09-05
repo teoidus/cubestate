@@ -3,4 +3,4 @@ const fs = require("fs");
 
 var compiler = new CubestateCompiler();
 
-compiler.compile(fs.readFileSync("helloworld.cs").toString());
+console.log(compiler.compile(fs.readFileSync("helloworld.cs").toString()));
