@@ -36,11 +36,6 @@ function compile (code) {
 		
 		cube.apply(moves.join(" "));
 		
-		console.log(moves.join(" "));
-		console.log(cube.state.join("").match(/.{9}/).join("\n"));
-		console.log(codestack);
-		console.log("-----");
-		
 		codestack += cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : (i == code.length - 1) ? lastFaceChars : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
 	}
 	
