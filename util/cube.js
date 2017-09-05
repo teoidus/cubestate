@@ -183,12 +183,12 @@ Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 
 		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu, transpositions, transDepth);
 
-		if (typeof searchResult != "string") {
+		if (searchResult) {
 			return accu;
 		}
 	}
 
-	return "no solution found";
+	return false;
 };
 
 (function () {
