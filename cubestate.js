@@ -14,6 +14,7 @@ function compile (code) {
 	
 	if (+code[code.length - 1]) {
 		lastFaceChars = +code[code.length - 1];
+		code = code.slice(0, code.length - 1);
 	}
 	
 	for (var i = 0; i < code.length; i ++) {
