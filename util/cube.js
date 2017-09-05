@@ -125,22 +125,25 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 	this.state = newState;
 }
 
-Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, transpositions) {
+Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, transpositions, transDepth) {
 	maxDepth = maxDepth || 0;
 	depth = depth || 0;
 	accu = accu || [];
 	transpositions = transpositions || {};
+	transDepth = transDepth || 7;
 
 	var currentState = this.state.join("");
 
 	if ((currentState in transpositions) && (transpositions[currentState] < depth)) {
 		return "no solution found";
 	}
-	transpositions[currentState] = depth;
+	if (depth <= transDepth) {
+		transpositions[currentState] = depth;
+	}
 
 	var lowerBound = 0;
 	for (var i = 0; i < 9; i ++) {
-		if (currentState[i] == goal[i]) {
+		if (currentState[i] != goal[i]) {
 			lowerBound ++;
 		}
 	}
@@ -186,12 +189,13 @@ Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 
 	var moveGroup = ["R", "U", "F", "L", "B", "D", "x"];
 	var transpositions = {};
+	var transDepth = 6;
 
 	for (var i = 0; i < maxDepth; i ++) {
 		console.log("Searching depth " + i);
 		var accu = [];
 
-		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu, transpositions);
+		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu, transpositions, transDepth);
 
 		if (typeof searchResult != "string") {
 			return accu;
