@@ -63,6 +63,10 @@ Cube.moves = {
 Cube.prototype.apply = function (moves, isInverse=false) {
 	moves = moves.split(" ");
 	
+	if (isInverse) {
+		moves.reverse();
+	}
+	
 	for (var i = 0; i < moves.length; i ++) {
 		var move = moves[i];
 		
