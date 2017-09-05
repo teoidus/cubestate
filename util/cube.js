@@ -107,7 +107,7 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 	}
 	
 	this.state = newState;
-}
+};
 
 Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, transpositions, transDepth) {
 	maxDepth = maxDepth || 0;
@@ -166,7 +166,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 	}
 
 	return "no solution found";
-}
+};
 
 Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 	maxDepth = maxDepth || 0;
@@ -187,10 +187,11 @@ Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 	}
 
 	return "no solution found";
-}
+};
 
 (function () {
 	var keys = Object.keys(Cube.moves);
+	
 	for (var i = 0; i < keys.length; i ++) {
 		if (typeof Cube.moves[keys[i]] == "string") {
 			var hack = new Cube();
@@ -203,6 +204,6 @@ Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 			Cube.moves[keys[i]] = hack.state;
 		}
 	}
-})()
+})();
 
 module.exports = Cube;
