@@ -4,10 +4,16 @@ function compile (code) {
 	var cube = new Cube();
 	var codestack = "";
 	
+	var lastFaceChars = 9;
+	
 	code = code.split("\n");
 	
 	while (!code[code.length - 1].length) {
 		code = code.slice(0, code.length - 1);
+	}
+	
+	if (+code[code.length - 1]) {
+		lastFaceChars = +code[code.length - 1];
 	}
 	
 	for (var i = 0; i < code.length; i ++) {
@@ -32,7 +38,7 @@ function compile (code) {
 		console.log(moves.join(" "));
 		console.log(cube.state.join("").match(/.{9}/).join("\n"));
 		
-		codestack += cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
+		codestack += cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : (i == code.length - 1) ? lastFaceChars : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
 	}
 	
 	return codestack;
