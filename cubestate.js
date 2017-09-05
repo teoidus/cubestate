@@ -1,4 +1,4 @@
-const Cube = require("util/cube.js");
+const Cube = require("./util/cube.js");
 
 function compile (code) {
 	var cube = new Cube();
