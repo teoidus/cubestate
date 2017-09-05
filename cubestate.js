@@ -76,9 +76,17 @@ function generateCS (code) {
 	
 	for (var i = 0; i < chunked.length; i ++) {
 		var chunk = chunked[i];
+		var appendix = "";
 		
-		console.log(chunk);
+		if (!+chunk[chunk.length - 1]) {
+			appendix = " " + chunk[chunk.length - 1] + (chunk.length - 1);
+			chunk = chunk.slice(0, chunk.length - 1);
+		}
+		
+		chunked[i] = cube.iterativeDeepening(chunk, 9).join(" ") + appendix;
 	}
+	
+	return chunked.join("\n");
 }
 
 module.exports = {
