@@ -17,23 +17,25 @@ CSCompiler.prototype.compile = function (code) {
 		var line = code[i].split(" ");
 		var moves = line.slice();
 		
-		var out = false;
-		var in = false;
+		var stdout = false;
+		var stdin = false;
 		
 		switch (line[line.length - 1][0]) {
 			case ".":
-				out = true;
+				stdout = true;
 				moves = moves.slice(0, moves.length - 1);
 				break;
 			case ",":
-				in = true;
+				stdin = true;
 				moves = moves.slice(0, moves.length - 1);
 		}
 		
 		this.cube.apply(moves);
 		
-		codestack += this.cube.state.slice(0, (out || in) ? +line[line.length - 1][1] : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (out ? "." : in ? "," : "");
+		codestack += this.cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
 	}
 	
 	return codestack;
 };
+
+module.exports = CSCompiler;
