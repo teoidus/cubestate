@@ -121,7 +121,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 	var currentState = this.state.join("");
 
 	if ((currentState in transpositions) && (transpositions[currentState] < depth)) {
-		return "no solution found";
+		return false;
 	}
 	if (depth <= transDepth) {
 		transpositions[currentState] = depth;
@@ -159,7 +159,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 			this.apply(move);
 
 			var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu, transpositions);
-			if (typeof attempt != "string")
+			if (attempt)
 				return accu;
 
 			this.apply(move, true);
@@ -167,7 +167,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 		}
 	}
 
-	return "no solution found";
+	return false;
 };
 
 Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
