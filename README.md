@@ -2,6 +2,8 @@
 A language which uses Rubik's Cubes as memory. Steals [this BF interpreter](https://github.com/susam/bfi).
 
 ## Usage
+After cloning, make sure to do `cd cubestate; chmod -R 777 .`.
+
 Simply `require("./cubestate.js")` to get the `cubestate` object.
 
 * `cubestate.chunkBF`: Compacts and chunks BF code into 9 byte chunks, unless a `.` or `,` is found, consistent with how cubestate interprets faces.
