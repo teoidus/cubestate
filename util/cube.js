@@ -159,11 +159,12 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 			this.apply(move);
 
 			var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu, transpositions);
-			if (attempt)
-				return accu;
 
 			this.apply(move, true);
 			accu.pop(move);
+			
+			if (attempt)
+				return accu;
 		}
 	}
 
