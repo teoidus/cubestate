@@ -1,5 +1,5 @@
 # [cubestate](https://www.esolangs.org/wiki/Cubestate)
-A language which uses Rubik's Cubes as memory. Steals [this BF compiler](https://github.com/gkucmierz/brainfuck/blob/master/brainfuck.js) for BF compilation in JS.
+A language which uses Rubik's Cubes as memory. Steals [this BF interpreter](https://github.com/susam/bfi).
 
 ## Usage
 Simply `require("./cubestate.js")` to get the `cubestate` object.
