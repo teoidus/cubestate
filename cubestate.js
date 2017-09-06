@@ -84,6 +84,10 @@ function generateCS (code) {
 		}
 		
 		chunked[i] = cube.iterativeDeepening(chunk, 9).join(" ") + appendix;
+		
+		if (chunked[i] == " ") {
+			chunked[i] = chunked[i].slice(1);
+		}
 	}
 	
 	return chunked.join("\n");
