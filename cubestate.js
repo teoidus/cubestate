@@ -98,7 +98,19 @@ function generateCS (code) {
 		chunked.push("" + lfs);
 	}
 	
-	return chunked.join("\n");
+	return chunked.join("\n")
+		.replace(/F S/g, "f")
+		.replace(/F' S'/g, "f'")
+		.replace(/B S'/g, "b")
+		.replace(/B' S/g, "b'")
+		.replace(/L M/g, "l")
+		.replace(/L' M'/g, "l'")
+		.replace(/R M'/g, "r")
+		.replace(/R' M/g, "r'")
+		.replace(/D E/g, "d")
+		.replace(/D' E'/g, "d'")
+		.replace(/U E'/g, "u")
+		.replace(/U' E/g, "u'");
 }
 
 module.exports = {
