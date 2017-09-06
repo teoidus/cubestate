@@ -111,17 +111,12 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 
 // epic
 // I have the vaguest idea how this works, but I was told to do some modifications to fix some weird stuff so yeah
-Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, transpositions) {
+Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 	maxDepth = maxDepth || 0;
 	depth = depth || 0;
 	accu = accu || [];
-	transpositions = transpositions || {};
 
 	var currentState = this.state.join("");
-
-	if ((currentState in transpositions) && (transpositions[currentState] < depth)) {
-		return false;
-	}
 
 	var lowerBound = 0;
 	for (var i = 0; i < goal.length; i ++) {
@@ -154,7 +149,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 			accu.push(move);
 			this.apply(move);
 
-			var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu, transpositions);
+			var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu);
 
 			if (attempt)
 				return accu;
@@ -171,13 +166,12 @@ Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 	maxDepth = maxDepth || 0;
 
 	var moveGroup = ["R", "U", "F", "L", "B", "D", "M", "E", "S"];
-	var transpositions = {};
 
 	for (var i = 0; i < maxDepth; i ++) {
 		console.log("Searching depth " + i);
 		var accu = [];
 
-		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu, transpositions);
+		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu);
 
 		if (searchResult) {
 			return accu;
