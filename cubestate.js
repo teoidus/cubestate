@@ -84,7 +84,6 @@ function generateCS (code) {
 		}
 		
 		var solution = cube.iterativeDeepening(chunk, 9).join(" ");
-		cube.apply(solution);
 		
 		console.log(chunk);
 		
