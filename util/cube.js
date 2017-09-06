@@ -136,27 +136,23 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 		}
 	}
 
-	var modifiers = ["", "'", "2"];
-
 	for (var i = 0; i < moveGroup.length; i ++) {
 		if ((accu.length > 0) && (accu[accu.length - 1][0] == moveGroup[i])) {
 			continue;
 		}
-
-		for (var j = 0; j < modifiers.length; j ++) {
-			var move = moveGroup[i] + modifiers[j];
-
-			accu.push(move);
-			this.apply(move);
-
-			var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu);
-
-			if (attempt)
-				return accu;
-			
-			this.apply(move, true);
-			accu.pop(move);
-		}
+		
+		var move = moveGroup[i];
+		
+		accu.push(move);
+		this.apply(move);
+		
+		var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu);
+		
+		if (attempt)
+			return accu;
+		
+		this.apply(move, true);
+		accu.pop(move);
 	}
 
 	return false;
@@ -165,10 +161,16 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 	maxDepth = maxDepth || 0;
 
-	var moveGroup = ["R", "U", "F", "L", "B", "D", "M", "E", "S"];
-
-	for (var i = 0; i < maxDepth; i ++) {
-		console.log("Searching depth " + i);
+	var moveGroup = [
+		"U", "L", "F", "R", "B", "D", "M", "E", "S",
+		"U'", "L'", "F'", "R'", "B'", "D'", "M'", "E'", "S'",
+		"U2", "L2", "F2", "R2", "B2", "D2", "M2", "E2", "S2"
+	];
+	
+	var i = -1;
+	
+	while (true) {
+		console.log("Searching depth " + ++i);
 		var accu = [];
 
 		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu);
