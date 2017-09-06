@@ -83,6 +83,8 @@ function generateCS (code) {
 			chunk = chunk.slice(0, chunk.length - 1);
 		}
 		
+		console.log(chunk);
+		
 		chunked[i] = cube.iterativeDeepening(chunk, 9).join(" ") + appendix;
 	}
 	
