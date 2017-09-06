@@ -74,6 +74,8 @@ function generateCS (code) {
 		.replace(/-/g, "5"));
 	var cube = new Cube();
 	
+	var lfs = 0;
+	
 	for (var i = 0; i < chunked.length; i ++) {
 		var chunk = chunked[i];
 		var appendix = "";
@@ -81,13 +83,19 @@ function generateCS (code) {
 		if (isNaN(+chunk[chunk.length - 1])) {
 			appendix = " " + chunk[chunk.length - 1] + (chunk.length - 1);
 			chunk = chunk.slice(0, chunk.length - 1);
+		} else if (i == chunked.length - 1) {
+			lfs = chunk.length;
 		}
 		
 		chunked[i] = cube.iterativeDeepening(chunk, 9).join(" ") + appendix;
 		
-		if (chunked[i] == " ") {
+		if (chunked[i][0] == " ") {
 			chunked[i] = chunked[i].slice(1);
 		}
+	}
+	
+	if (lfs) {
+		chunked.push("" + lfs);
 	}
 	
 	return chunked.join("\n");
