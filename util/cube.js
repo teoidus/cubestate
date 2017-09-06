@@ -158,9 +158,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 	return false;
 };
 
-Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
-	maxDepth = maxDepth || 0;
-
+Cube.prototype.iterativeDeepening = function (goal) {
 	var moveGroup = [
 		"U", "L", "F", "R", "B", "D", "M", "E", "S",
 		"U'", "L'", "F'", "R'", "B'", "D'", "M'", "E'", "S'",
