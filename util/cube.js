@@ -173,7 +173,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, tr
 Cube.prototype.iterativeDeepening = function (goal, maxDepth) {
 	maxDepth = maxDepth || 0;
 
-	var moveGroup = ["R", "U", "F", "L", "B", "D", "x"];
+	var moveGroup = ["R", "U", "F", "L", "B", "D", "M", "E", "S"];
 	var transpositions = {};
 	var transDepth = 6;
 
