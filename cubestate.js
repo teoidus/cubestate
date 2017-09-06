@@ -85,10 +85,11 @@ function generateCS (code) {
 		
 		console.log(chunk);
 		
-		chunked[i] = cube.iterativeDeepening(chunk, 9).join(" ") + appendix;
+		console.log(chunked[i] = cube.iterativeDeepening(chunk, 9).join(" ") + appendix);
+		console.log("------");
 	}
 	
-	return chunked.join("\n");
+	//return chunked.join("\n");
 }
 
 module.exports = {
