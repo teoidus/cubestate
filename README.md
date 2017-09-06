@@ -1,4 +1,4 @@
-# [https://www.esolangs.org/wiki/Cubestate]cubestate
+# [cubestate](https://www.esolangs.org/wiki/Cubestate)
 A language which uses Rubik's Cubes as memory.
 
 ## Usage
