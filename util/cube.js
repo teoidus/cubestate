@@ -161,9 +161,8 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 	for (var i = 0; i < moveGroup.length; i ++) {
 		var move = moveGroup[i];
         	for (var j = accu.length - 1; (j >= 0) && (Cube.axes[move[0]] == Cube.axes[accu[j][0]]); j --) {
-			if (move[0] == accu[j][0]) ||
-			(moveGroup.indexOf(accu[j]) >= i))
-			continue outerLoop;
+			if (move[0] == accu[j][0]) || (moveGroup.indexOf(accu[j]) >= i))
+				continue outerLoop;
 		}
 		
 		accu.push(move);
