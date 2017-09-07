@@ -60,6 +60,27 @@ Cube.moves = {
 	"S": "f F'"
 };
 
+Cube.axes = {
+	"U": 0,
+	"x": 1,
+	"y": 0,
+	"F": 2,
+	"R": 1,
+	"L": 1,
+	"D": 0,
+	"B": 2,
+	"z": 2,
+	"f": 2,
+	"r": 1,
+	"u": 0,
+	"l": 1,
+	"d": 0,
+	"b": 2,
+	"M": 1,
+	"E": 0,
+	"S": 2
+};
+
 Cube.prototype.apply = function (moves, isInverse) {
 	moves = moves.split(/\s+/);
 	isInverse = isInverse || false;
@@ -136,12 +157,14 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 		}
 	}
 
+	outerLoop:
 	for (var i = 0; i < moveGroup.length; i ++) {
-		if ((accu.length > 0) && (accu[accu.length - 1][0] == moveGroup[i])) {
-			continue;
-		}
-		
 		var move = moveGroup[i];
+        	for (var j = accu.length - 1; (j >= 0) && (Cube.axes[move[0]] == Cube.axes[accu[j][0]]); j --) {
+			if (move[0] == accu[j][0]) ||
+			(moveGroup.indexOf(accu[j]) >= i))
+			continue outerLoop;
+		}
 		
 		accu.push(move);
 		this.apply(move);
