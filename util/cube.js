@@ -130,6 +130,24 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 	this.state = newState;
 };
 
+function heuristic (state) {
+	state = state.split("").map((e) => 1 - e)
+	
+	var edges = 0;
+	
+	for (var i = 0; i < state.length; i ++) {
+		if (i % 3 < 2) {
+			edges += state[i] | state[i + 1];
+		}
+		
+		if (i + 3 < state.length) {
+			edges += state[i] | state[i + 3];
+		}
+	}
+	
+	return (edges * 3) >> 3;
+}
+
 // epic
 // I have the vaguest idea how this works, but I was told to do some modifications to fix some weird stuff so yeah
 Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
@@ -138,14 +156,8 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 	accu = accu || [];
 
 	var currentState = this.state.join("");
-
-	var lowerBound = 0;
-	for (var i = 0; i < goal.length; i ++) {
-		if (currentState[i] != goal[i]) {
-			lowerBound ++;
-		}
-	}
-	if ((depth + lowerBound/3) > maxDepth) {
+	
+	if ((depth + heuristic(goal.split("").map((e, i) => (e == currentState[i]) ? 1 : 0).join(""))) > maxDepth) {
 		return false;
 	}
 
