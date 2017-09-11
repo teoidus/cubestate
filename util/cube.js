@@ -130,6 +130,7 @@ Cube.prototype.applyMove = function (raw, isInverse) {
 	this.state = newState;
 };
 
+// idek help me plz
 function heuristic (state) {
 	state = state.split("").map((e) => 1 - e)
 	
@@ -148,8 +149,6 @@ function heuristic (state) {
 	return (edges * 3) >> 3;
 }
 
-// epic
-// I have the vaguest idea how this works, but I was told to do some modifications to fix some weird stuff so yeah
 Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 	maxDepth = maxDepth || 0;
 	depth = depth || 0;
@@ -168,7 +167,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 			return false;
 		}
 	}
-
+	
 	outerLoop:
 	for (var i = 0; i < moveGroup.length; i ++) {
 		var move = moveGroup[i];
@@ -203,6 +202,7 @@ Cube.prototype.iterativeDeepening = function (goal) {
 	
 	while (true) {
 		console.log("Searching depth " + ++i);
+		
 		var accu = [];
 
 		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu);
