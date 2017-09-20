@@ -216,7 +216,7 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, no
 		accu.push(move);
 		this.apply(move);
 		
-		var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu);
+		var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu, nodes);
 		
 		if (attempt)
 			return accu;
