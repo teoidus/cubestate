@@ -77,6 +77,7 @@ function generateCS (code) {
 	var lfs = 0;
 	
 	var nodes = [0];
+	var start = new Date().getTime();
 	
 	for (var i = 0; i < chunked.length; i ++) {
 		var chunk = chunked[i];
@@ -98,6 +99,11 @@ function generateCS (code) {
 	
 	if (lfs) {
 		chunked.push("" + lfs);
+	}
+	
+	if (cube.DEBUG) {
+		var end = new Date().getTime() - start;
+		console.log("Completed in " + end + " seconds and searched " + nodes[0] + " nodes at " + (nodes[0] / end) + " nodes per second.");
 	}
 	
 	return chunked.join("\n")
