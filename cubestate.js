@@ -102,7 +102,7 @@ function generateCS (code) {
 	}
 	
 	if (Cube.DEBUG) {
-		var end = new Date().getTime() - start;
+		var end = (new Date().getTime() - start) / 1000;
 		console.log("Completed in " + end + " seconds and searched " + nodes[0] + " nodes at " + (nodes[0] / end) + " nodes per second.");
 	}
 	
