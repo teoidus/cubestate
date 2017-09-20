@@ -76,6 +76,8 @@ function generateCS (code) {
 	
 	var lfs = 0;
 	
+	var nodes = [0];
+	
 	for (var i = 0; i < chunked.length; i ++) {
 		var chunk = chunked[i];
 		var appendix = "";
@@ -87,7 +89,7 @@ function generateCS (code) {
 			lfs = chunk.length;
 		}
 		
-		chunked[i] = cube.iterativeDeepening(chunk, 9).join(" ") + appendix;
+		chunked[i] = cube.iterativeDeepening(chunk, nodes).join(" ") + appendix;
 		
 		if (chunked[i][0] == " ") {
 			chunked[i] = chunked[i].slice(1);
