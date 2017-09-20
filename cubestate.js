@@ -101,7 +101,7 @@ function generateCS (code) {
 		chunked.push("" + lfs);
 	}
 	
-	if (cube.DEBUG) {
+	if (Cube.DEBUG) {
 		var end = new Date().getTime() - start;
 		console.log("Completed in " + end + " seconds and searched " + nodes[0] + " nodes at " + (nodes[0] / end) + " nodes per second.");
 	}
