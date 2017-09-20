@@ -57,7 +57,25 @@ Cube.moves = {
 	"b": "F z'",
 	"M": "l L'",
 	"E": "d D'",
-	"S": "f F'"
+	"S": "f F'",
+	"U2": "U U",
+	"x2": "x x",
+	"y2": "y y",
+	"F2": "F F",
+	"R2": "R R",
+	"L2": "L L",
+	"B2": "B B",
+	"D2": "D D",
+	"z2": "z z",
+	"f2": "f f",
+	"r2": "r r",
+	"u2": "u u",
+	"l2": "l l",
+	"d2": "d d",
+	"b2": "b b",
+	"M2": "M M",
+	"E2": "E E",
+	"S2": "S S"
 };
 
 Cube.axes = {
@@ -99,9 +117,6 @@ Cube.prototype.apply = function (moves, isInverse) {
 		switch (move[move.length - 1]) {
 			case "'":
 				this.applyMove(move[0], !isInverse);
-			break; case "2":
-				this.applyMove(move[0]);
-				this.applyMove(move[0]);
 			break; default:
 				this.applyMove(move, isInverse);
 		}
