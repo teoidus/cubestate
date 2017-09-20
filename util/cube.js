@@ -1,3 +1,6 @@
+const DEBUG = true;
+Cube.DEBUG = DEBUG;
+
 function Cube () {
 	// U is 0
 	// L is 1
@@ -182,10 +185,11 @@ function heuristic (state) {
 	return (edges * 3) >> 3;
 }
 
-Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
+Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, nodes) {
 	maxDepth = maxDepth || 0;
 	depth = depth || 0;
 	accu = accu || [];
+	nodes = nodes || [0];
 
 	var currentState = this.state.join("");
 	
@@ -219,12 +223,16 @@ Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu) {
 		
 		this.apply(move, true);
 		accu.pop(move);
+		
+		if (DEBUG) {
+			nodes[0] ++;
+		}
 	}
 
 	return false;
 };
 
-Cube.prototype.iterativeDeepening = function (goal) {
+Cube.prototype.iterativeDeepening = function (goal, nodes) {
 	var moveGroup = [
 		"U", "L", "F", "R", "B", "D", "M", "E", "S",
 		"U'", "L'", "F'", "R'", "B'", "D'", "M'", "E'", "S'",
@@ -234,11 +242,13 @@ Cube.prototype.iterativeDeepening = function (goal) {
 	var i = -1;
 	
 	while (true) {
-		console.log("Searching depth " + ++i);
+		if (DEBUG) {
+			console.log("Searching depth " + ++i);
+		}
 		
 		var accu = [];
 
-		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu);
+		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu, nodes);
 
 		if (searchResult) {
 			return accu;
