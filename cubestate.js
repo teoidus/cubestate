@@ -90,6 +90,7 @@ function generateCS (code) {
 			lfs = chunk.length;
 		}
 		
+		console.log("Compiling chunk " + i + " of " + chunked.length);
 		chunked[i] = cube.iterativeDeepening(chunk, nodes).join(" ") + appendix;
 		
 		if (chunked[i][0] == " ") {
