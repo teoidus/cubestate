@@ -1,21 +1,30 @@
 const DEBUG = true;
+const MAX_SEARCH_DEPTH = 100;
 Cube.DEBUG = DEBUG;
 
-function Cube () {
+function Cube() {
 	// U is 0
 	// L is 1
 	// F is 2
 	// R is 3
 	// B is 4
 	// D is 5
-	this.state = [
+	this.state = Uint8Array.from([
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 		1, 1, 1, 1, 1, 1, 1, 1, 1,
 		2, 2, 2, 2, 2, 2, 2, 2, 2,
 		3, 3, 3, 3, 3, 3, 3, 3, 3,
 		4, 4, 4, 4, 4, 4, 4, 4, 4,
+		5, 5, 5, 5, 5, 5, 5, 5, 5,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, // preallocated swap space for later (this was what yielded 400knps -> 800knps)
+		1, 1, 1, 1, 1, 1, 1, 1, 1,
+		2, 2, 2, 2, 2, 2, 2, 2, 2,
+		3, 3, 3, 3, 3, 3, 3, 3, 3,
+		4, 4, 4, 4, 4, 4, 4, 4, 4,
 		5, 5, 5, 5, 5, 5, 5, 5, 5
-	];
+	]);
+	this.statePtr = 0 | 0;
+	this.stateFlipper = 54 | 0;
 }
 
 // For each value in the move array, newstate[index_of_value] = oldstate[value]
@@ -33,9 +42,9 @@ Cube.moves = {
 	"x": [
 		18, 19, 20, 21, 22, 23, 24, 25, 26,
 		11, 14, 17, 10, 13, 16, 9, 12, 15,
-		45, 46, 47, 48, 49, 50, 51, 52, 53, 
+		45, 46, 47, 48, 49, 50, 51, 52, 53,
 		33, 30, 27, 34, 31, 28, 35, 32, 29,
-		8, 7, 6, 5, 4, 3, 2, 1, 0, 
+		8, 7, 6, 5, 4, 3, 2, 1, 0,
 		44, 43, 42, 41, 40, 39, 38, 37, 36
 	],
 	"y": [
@@ -120,159 +129,217 @@ Cube.axes = {
 	"S2": 2
 };
 
-Cube.prototype.apply = function (moves, isInverse) {
+Cube.moveGroup = Object.keys(Cube.moves);
+Cube.moveGroup = Cube.moveGroup.concat(Cube.moveGroup.map(
+	(e) => (e.length == 1) ? e + "'" : ""
+).filter((e) => (e !== "")));
+
+Cube.prototype.applyNUI = function(moves, isInverse) {
 	moves = moves.split(/\s+/);
 	isInverse = isInverse || false;
-	
+
 	if (isInverse) {
 		moves.reverse();
 	}
-	
-	for (var i = 0; i < moves.length; i ++) {
+
+	for (var i = 0; i < moves.length; i++) {
 		var move = moves[i];
 
 		if (!move) {
 			continue;
 		}
-		
+
 		switch (move[move.length - 1]) {
 			case "'":
-				this.applyMove(move[0], !isInverse);
-			break; default:
-				this.applyMove(move, isInverse);
+				this.applyMoveNUI(move[0], !isInverse);
+				break;
+			default:
+				this.applyMoveNUI(move, isInverse);
 		}
 	}
 };
 
-Cube.prototype.applyMove = function (raw, isInverse) {
+Cube.prototype.applyMoveNUI = function(raw, isInverse) {
 	var move = Cube.moves[raw];
 
 	isInverse = isInverse || false;
-	
+
 	if (typeof move == "string") {
 		return this.apply(move, isInverse);
 	}
-	
+
 	var newState = this.state.slice();
-	
-	for (var i = 0; i < move.length; i ++) {
+
+	for (var i = 0; i < move.length; i++) {
 		if (isInverse) {
 			newState[move[i]] = this.state[i];
 		} else {
 			newState[i] = this.state[move[i]];
 		}
 	}
-	
+
 	this.state = newState;
 };
 
-// idek help me plz
-function heuristic (state) {
-	state = state.split("").map((e) => 1 - e)
-	
-	var edges = 0;
-	
-	for (var i = 0; i < state.length; i ++) {
-		if (i % 3 < 2) {
-			edges += state[i] | state[i + 1];
-		}
-		
-		if (i + 3 < state.length) {
-			edges += state[i] | state[i + 3];
-		}
+Cube.prototype.applyMove = function(move) {
+	move = move << 6;
+
+	var oldPtr = this.statePtr | 0;
+	this.statePtr ^= this.stateFlipper;
+
+	var i = 54;
+	while (i--) {
+		this.state[this.statePtr + i] = this.state[oldPtr + Cube.moves[move | i]];
 	}
-	
-	return (edges * 3) >> 3;
-}
+};
 
-Cube.prototype.bruteForce = function (goal, moveGroup, maxDepth, depth, accu, nodes) {
-	maxDepth = maxDepth || 0;
-	depth = depth || 0;
-	accu = accu || [];
-	nodes = nodes || [0];
+Cube.prototype.applyMoveInverse = function(move) { // splitting into 2 fns was consistently faster
+	move = move << 6;
 
-	var currentState = this.state.join("");
-	
-	if ((depth + heuristic(goal.split("").map((e, i) => (e == currentState[i]) ? 1 : 0).join(""))) > maxDepth) {
+	var oldPtr = this.statePtr | 0;
+	this.statePtr ^= this.stateFlipper;
+
+	var i = 54;
+	while (i--) {
+		this.state[this.statePtr + Cube.moves[move | i]] = this.state[oldPtr + i];
+	}
+};
+
+Cube.pruneLookup = new Uint8Array(1 << 9);
+(function() {
+	for (var i = 0; i < (1 << 9); i++) {
+		var s = 0;
+		for (var j = 8; j >= 0; j--) {
+			if (j % 3) {
+				s += 1 & ((i >> j) | (i >> (j - 1)));
+			}
+			if (i - 2) {
+				s += 1 & ((i >> j) | (i >> (j - 3)));
+			}
+		}
+		Cube.pruneLookup[i] = (s * 3) >> 3;
+	}
+})();
+
+Cube.prototype.bruteForce = function(goal, moveGroup, maxDepth, depth, accu, nodes) {
+	// compute heuristic
+	var heuristic = 0 | 0;
+	var i = goal.length | 0,
+		j = (goal.length + this.statePtr) | 0;
+
+	var hash = 0 | 0;
+	while (i--) {
+		j--;
+		hash = (hash << 1) | (this.state[j] != goal[i]);
+	}
+	hash <<= 9 - goal.length;
+	if (depth + Cube.pruneLookup[hash] > maxDepth) {
 		return false;
 	}
 
 	if (depth == maxDepth) {
-		if (currentState.substring(0, goal.length) == goal) {
-			return accu;
-		} else {
-			return false;
+		var i = goal.length;
+		while (i--) { // always stops checking asap
+			if (goal[i] != this.state[this.statePtr + i]) {
+				return false;
+			}
 		}
+		return accu;
 	}
-	
+
 	outerLoop:
-	for (var i = 0; i < moveGroup.length; i ++) {
-		var move = moveGroup[i];
-        	for (var j = accu.length - 1; (j >= 0) && (Cube.axes[move[0]] == Cube.axes[accu[j][0]]); j --) {
-			if ((move[0] == accu[j][0]) || (moveGroup.indexOf(accu[j]) >= i))
-				continue outerLoop;
+		for (var i = -1, l = moveGroup.length; ++i < l;) {
+			var move = moveGroup[i];
+
+			for (var j = accu[0] + 1;
+				(--j > 0) && (Cube.axes[move] == Cube.axes[accu[j]]);) {
+				if ((Cube.types[move] == Cube.types[accu[j]]) || (moveGroup.indexOf(accu[j]) >= i))
+					continue outerLoop;
+			}
+
+			accu[++accu[0]] = move;
+			this.applyMove(move);
+
+			var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu, nodes);
+
+			if (attempt)
+				return accu;
+
+			this.applyMoveInverse(move);
+			--accu[0];
+
+			if (DEBUG) {
+				nodes[0]++;
+			}
 		}
-		
-		accu.push(move);
-		this.apply(move);
-		
-		var attempt = this.bruteForce(goal, moveGroup, maxDepth, depth + 1, accu, nodes);
-		
-		if (attempt)
-			return accu;
-		
-		this.apply(move, true);
-		accu.pop(move);
-		
-		if (DEBUG) {
-			nodes[0] ++;
-		}
-	}
 
 	return false;
 };
 
-Cube.prototype.iterativeDeepening = function (goal, nodes) {
+Cube.prototype.iterativeDeepening = function(goal, nodes) {
+	nodes = nodes || [0];
 	var moveGroup = [
 		"U", "L", "F", "R", "B", "D", "M", "E", "S",
 		"U'", "L'", "F'", "R'", "B'", "D'", "M'", "E'", "S'",
 		"U2", "L2", "F2", "R2", "B2", "D2", "M2", "E2", "S2"
-	];
-	
-	var i = -1;
-	
-	while (true) {
-		if (DEBUG) {
-			console.log("Searching depth " + ++i);
-		}
-		
-		var accu = [];
+	].map((e) => Cube.moveGroup.indexOf(e));
 
-		var searchResult = this.bruteForce(goal, moveGroup, i, 0, accu, nodes);
+	var goalArray = goal.split("").map((e) => e | 0);
+	var accu = new Uint8Array(MAX_SEARCH_DEPTH); // [length, item1, item2, ..]
+
+	for (var i = 0; true; i++) {
+		if (DEBUG) {
+			console.log("Searching depth " + i);
+		}
+
+		var searchResult = this.bruteForce(goalArray, moveGroup, i, 0, accu, nodes);
 
 		if (searchResult) {
-			return accu;
+			var s = [];
+			for (var i = 1; i < accu[0] + 1; i++) {
+				s.push(Cube.moveGroup[accu[i]]);
+			}
+			return s;
 		}
 	}
-
+	
 	return false;
 };
 
-(function () {
-	var keys = Object.keys(Cube.moves);
-	
-	for (var i = 0; i < keys.length; i ++) {
-		if (typeof Cube.moves[keys[i]] == "string") {
+(function() { // precompile all index maps (including inverses) using .*NUI methods
+	for (var i = 0; i < Cube.moveGroup.length; i++) {
+		var move = Cube.moveGroup[i];
+		if (!(move in Cube.moves)) {
+			Cube.moves[move] = move; // inverses
+		}
+		if (typeof Cube.moves[move] == "string") {
 			var hack = new Cube();
-
-			for (var j = 0; j < hack.state.length; j ++) {
-				hack.state[j] = j;
-			}
-
-			hack.apply(Cube.moves[keys[i]]);
-			Cube.moves[keys[i]] = hack.state;
+			hack.state = hack.state.map((e, i) => i);
+			
+			hack.applyNUI(Cube.moves[move]);
+			Cube.moves[move] = hack.state;
 		}
 	}
+})();
+
+(function() { // convert Cube.moves from {} to Uint8Array
+	var uimoves = new Uint8Array(Cube.moveGroup.length << 6);
+
+	for (var i = 0; i < Cube.moveGroup.length; i++) {
+		for (var j = 0; j < 54; j++) {
+			uimoves[(i << 6) | j] = Cube.moves[Cube.moveGroup[i]][j];
+		}
+	}
+
+	Cube.moves = uimoves;
+})();
+
+(function() { // convert Cube.axes from {} to Uint8Array, and construct Cube.types
+	var uiaxes = Uint8Array.from(Cube.moveGroup.map((e) => Cube.axes[e[0]]));
+	var uitypes = Uint8Array.from(Cube.moveGroup.map((e) => Cube.moveGroup.indexOf(e[0])));
+
+	Cube.axes = uiaxes;
+	Cube.types = uitypes;
 })();
 
 module.exports = Cube;
