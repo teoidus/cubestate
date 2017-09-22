@@ -1,4 +1,4 @@
-const Cube = require("./util/cube.js");
+const Cube = require("./cube.js");
 
 function compile (code) {
 	var cube = new Cube();
@@ -124,7 +124,25 @@ function generateCS (code) {
 		.replace(/L2 M2/g, "l2")
 		.replace(/R2 M2/g, "r2")
 		.replace(/D2 E2/g, "d2")
-		.replace(/U2 E2/g, "u2");
+		.replace(/U2 E2/g, "u2")
+		.replace(/S F(\s|$)/g, "f$1")
+		.replace(/S' F'/g, "f'")
+		.replace(/S' B(\s|$)/g, "b")
+		.replace(/S B'/g, "b'")
+		.replace(/M L(\s|$)/g, "l$1")
+		.replace(/M' L'/g, "l'")
+		.replace(/M' R(\s|$)/g, "r$1")
+		.replace(/M R'/g, "r'")
+		.replace(/E D(\s|$)/g, "d$1")
+		.replace(/E' D'/g, "d'")
+		.replace(/E' U(\s|$)/g, "u$1")
+		.replace(/E U'/g, "u'")
+		.replace(/S2 F2/g, "f2")
+		.replace(/S2 B2/g, "b2")
+		.replace(/M2 L2/g, "l2")
+		.replace(/M2 R2/g, "r2")
+		.replace(/E2 D2/g, "d2")
+		.replace(/E2 U2/g, "u2");
 }
 
 module.exports = {
