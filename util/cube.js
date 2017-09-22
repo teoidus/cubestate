@@ -213,7 +213,7 @@ Cube.pruneLookup = new Uint8Array(1 << 9);
 			if (j % 3) {
 				s += 1 & ((i >> j) | (i >> (j - 1)));
 			}
-			if (i - 2) {
+			if (i - 3) {
 				s += 1 & ((i >> j) | (i >> (j - 3)));
 			}
 		}
