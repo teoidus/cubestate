@@ -1,4 +1,3 @@
-Completed in 14101.741 seconds and searched 22978057473 nodes at 1629448.2697561954 nodes per second.
 U B L M2 .4
 F B M2 U' B2 L' D
 L B d S R2 F2
