@@ -449,7 +449,7 @@ Cube.pruneLookup = new Uint8Array(1 << 9);
     0b011000001, //l
     0b110001000, //e
     0b100100010  //m
-  ]; // bits are reversed for hash algorithm
+  ];
   
   var bruteForce = function(bitmap, depth, maxdepth) {
     if ((depth == maxdepth) || !bitmap) { // found a minimum solution length <= maxdepth
