@@ -437,7 +437,7 @@ Cube.prototype.applyBasicMove = function(move) {}; // placeholder
 	`));
 })();
 
-console.log(Cube.prototype.applyBasicMove.toString())
+//console.log(Cube.prototype.applyBasicMove.toString())
 
 // lookup table for pruning heuristic
 Cube.pruneLookup = new Uint8Array(1 << 9);
@@ -549,8 +549,8 @@ Cube.prototype.iterativeDeepening = function(goal, nodes) {
 	var mapping = [0, 1, 2, 7, 8, 3, 6, 5, 4];// TODO: fix this and comparison w/ goal state and prunign
 	var goalInt = (goal == "") ? 0 : goal.split("").map((e, i) => ((e | 0) + 1) << (3 * mapping[i])).reduce((x, y) => x | y)|0;
 	var goalMask = (goal == "") ? 0 : goal.split("").map((e, i) => 7 << (3 * mapping[i])).reduce((x, y) => x | y)|0;
-	console.log(goal, goalInt.toString(8));
-	console.log(goalMask.toString(8));
+	//console.log(goal, goalInt.toString(8));
+	//console.log(goalMask.toString(8));
 	var accu = new Uint8Array(MAX_SEARCH_DEPTH); // [length, item1, item2, ..]
 	
 	for (var i = 0; true; i++) {
