@@ -36,7 +36,8 @@ function compile (code) {
 		
 		cube.apply(moves.join(" "));
 		
-		codestack += cube.state.slice(0, (stdout || stdin) ? +line[line.length - 1][1] : (i == code.length - 1) ? lastFaceChars : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
+		var map = [0, 1, 2, 7, 8, 3, 6, 5, 4];
+		codestack += map.map((e, i) => ((cube.state[0] >> (e * 3)) & 0o7) - 1).slice(0, (stdout || stdin) ? +line[line.length - 1][1] : (i == code.length - 1) ? lastFaceChars : 9).map((e) => ["+", "[", ">", "]", "<", "-"][e]).join("") + (stdout ? "." : stdin ? "," : "");
 	}
 	
 	return codestack;
